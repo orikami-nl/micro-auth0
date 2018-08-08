@@ -1,5 +1,5 @@
 {
-  "name": "micro-auth0",
+  "name": "@orikami/micro-auth0",
   "version": "0.0.1",
   "description": "Micro Auth0 helper",
   "main": "index.js",
@@ -9,5 +9,16 @@
     "jsonwebtoken": "^8.0.1",
     "request": "^2.81.0",
     "url": "^0.11.0"
-  }
+  },
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/orikami-nl/micro-auth0.git"
+  },
+  "bugs": {
+    "url": "https://github.com/orikami-nl/micro-auth0/issues"
+  },
+  "homepage": "https://github.com/orikami-nl/micro-auth0#readme"
 }
