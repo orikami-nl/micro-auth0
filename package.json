@@ -1,0 +1,13 @@
+{
+  "name": "micro-auth0",
+  "version": "0.0.1",
+  "description": "Micro Auth0 helper",
+  "main": "index.js",
+  "author": "Mark Marijnissen",
+  "license": "MIT",
+  "dependencies": {
+    "jsonwebtoken": "^8.0.1",
+    "request": "^2.81.0",
+    "url": "^0.11.0"
+  }
+}
