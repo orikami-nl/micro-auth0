@@ -1,13 +1,12 @@
 {
   "name": "@orikami/micro-auth0",
-  "version": "0.0.2",
+  "version": "0.1.0",
   "description": "Micro Auth0 helper",
   "main": "index.js",
   "author": "Mark Marijnissen",
   "license": "MIT",
   "dependencies": {
     "jsonwebtoken": "^8.0.1",
-    "request": "^2.87.0",
     "url": "^0.11.0"
   },
   "scripts": {
@@ -20,5 +19,8 @@
   "bugs": {
     "url": "https://github.com/orikami-nl/micro-auth0/issues"
   },
-  "homepage": "https://github.com/orikami-nl/micro-auth0#readme"
+  "homepage": "https://github.com/orikami-nl/micro-auth0#readme",
+  "devDependencies": {
+    "yargs": "^12.0.1"
+  }
 }

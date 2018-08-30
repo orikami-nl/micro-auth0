@@ -1,81 +1,50 @@
 var url = require("url");
-var request = require("request");
 var jwt = require("jsonwebtoken");
+const auth0 = require("./auth0");
 
-function verifyAuth0(domain, token, role) {
-    return new Promise((resolve, reject) => {
-        request(
-            {
-                url: `https://${domain}/userinfo`,
-                method: "GET",
-                headers: { Authorization: `Bearer ${token}` }
-            },
-            (err, res, result) => {
-                if (err) {
-                    err.statusCode = 500;
-                    reject(err);
-                } else if (result === "Unauthorized") {
-                    const error = new Error("Token invalid");
-                    error.statusCode = 403;
-                    reject(error);
-                } else if (res.statusCode !== 200) {
-                    const error = new Error(
-                        "Auth0 statusCode " + res.statusCode
-                    );
-                    error.statusCode = 500;
-                    reject(error);
-                } else {
-                    const user = JSON.parse(result);
-                    if (
-                        role &&
-                        (!user["https://orikami-api.nl/roles"] ||
-                            user["https://orikami-api.nl/roles"].indexOf(role) <
-                                0)
-                    ) {
-                        const error = new Error(`"${role}" role is required`);
-                        error.statusCode = 403;
-                        reject(error);
-                    } else {
-                        resolve(JSON.parse(result));
-                    }
-                }
-            }
+module.exports = (opts = {}) => handler => async (req, res) => {
+  // Get token from query-string (?token=)
+  const query = url.parse(req.url || "", true).query || {};
+  let token = query.token || "";
+
+  // Get token from Authorization header
+  if (
+    req.headers.authorization &&
+    req.headers.authorization.match(/bearer /i)
+  ) {
+    token = req.headers.authorization.substr(7);
+  }
+
+  // Fail if no token is supplied
+  if (!token) {
+    res.statusCode = 401;
+    throw new Error("No token");
+  }
+
+  // Try to verify JWT token
+  try {
+    const jwtOptions = Object.assign({}, auth0.jwt, opts.jwt);
+    const publickey = opts.publickey || auth0.publickey;
+    req.token = jwt.verify(token, publickey, jwtOptions);
+
+    // We use an Auth0 extension for Authorization
+    // Using a rule, the token will have an array of roles.
+    // See https://orikami.eu8.webtask.io/adf6e2f2b84784b57522e3b19dfc9201/admins/login
+    if (opts.roles && opts.roles.allowed && opts.roles.key) {
+      const roles = req.token[opts.roles.key];
+      if (roles.every(role => opts.roles.allowed.indexOf(role) < 0)) {
+        throw new Error(
+          `Forbidden for ${roles.join(", ")}, need: ${opts.roles.allowed.join(
+            ", "
+          )}`
         );
-    });
-}
+      }
+    }
+  } catch (err) {
+    res.statusCode = 403;
+    throw err;
+  }
 
-function verifyjwt(publickey, token) {
-    return new Promise((resolve, reject) => {
-        try {
-            resolve(
-                jwt.verify(token, publickey, {
-                    algorithms: ["RS256"],
-                    ignoreExpiration: true
-                })
-            );
-        } catch (error) {
-            reject(error);
-        }
-    });
-}
-
-module.exports = (req, domainOrPublickey, role = null, type = "auth0") => {
-    const query = url.parse(req.url || "", true).query || {};
-    let token = query.token || "";
-    if (
-        req.headers.authorization &&
-        req.headers.authorization.match(/bearer /i)
-    ) {
-        token = req.headers.authorization.substr(7);
-    }
-    if (!token) {
-        const error = new Error("No token");
-        error.statusCode = 401;
-        return Promise.reject(error);
-    }
-    if (type === "auth0") {
-        return verifyAuth0(domainOrPublickey, token, role);
-    } else {
-        return verifyjwt(domainOrPublickey, token, role);
-    }
+  // All OK, run handler
+  return await handler(req, res);
 };
