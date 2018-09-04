@@ -49,6 +49,11 @@ const handler = require("./index");
 module.exports = auth0(handler);
 ```
 
+## Known issues
+
+### publickey in auth0.js
+If you change the publickey in the ``auth0.js`` file be aware that the Certificate string has no tabs or extra space in it. 
+
 ## Changelog
 
 - 0.1.0 - Refactor
