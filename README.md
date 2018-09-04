@@ -43,8 +43,8 @@ See https://orikami.eu8.webtask.io/adf6e2f2b84784b57522e3b19dfc9201/admins/login
 
 ## Usage
 ```
-const auth0 = require("@orikami/micro-auth0")(require("./auth0.js));
-const handler = require("./index);
+const auth0 = require("@orikami/micro-auth0")(require("./auth0.js"));
+const handler = require("./index");
 
 module.exports = auth0(handler);
 ```
