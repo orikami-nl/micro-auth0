@@ -3,6 +3,7 @@
 Helper to get user using Auth0
 
 ## Install
+
 ```
 npm install --save @orikami/micro-auth0
 ```
@@ -18,6 +19,7 @@ You can customize and verify the configuration as follows:
 3. Settings > Certificates > Signing Certificate contains the `publickey`.
 
 If you want to customize configuration, create a [auth0.js](./auth0.js) in your project:
+
 ```js
 module.exports = {
     publickey: `...` // default: orikami.eu.auth0.com
@@ -37,11 +39,12 @@ module.exports = {
 }
 ```
 
-If you define `roles.allowed`, micro-auth0 will check if the role in the token. Currently, this is configured using the Authorization extension of Auth0. 
+If you define `roles.allowed`, micro-auth0 will check if the role in the token. Currently, this is configured using the Authorization extension of Auth0.
 
 See https://orikami.eu8.webtask.io/adf6e2f2b84784b57522e3b19dfc9201/admins/login
 
 ## Usage
+
 ```
 const auth0 = require("@orikami/micro-auth0")(require("./auth0.js));
 const handler = require("./index);
@@ -51,5 +54,6 @@ module.exports = auth0(handler);
 
 ## Changelog
 
+- 0.3.0 - Check for token query param in `x-forwarded-uri`
 - 0.1.0 - Refactor
 - 0.0.2 - Initial release

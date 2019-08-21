@@ -7,6 +7,10 @@ module.exports = (opts = {}) => handler => async (req, res) => {
   const query = url.parse(req.url || "", true).query || {};
   let token = query.token || "";
 
+  // Get token from x-forwarded-uri header (?token=)
+  const fwdQuery = url.parse(req.headers["x-forwarded-uri"] || "").query || {};
+  token = token || fwdQuery.token;
+
   // Get token from Authorization header
   if (
     req.headers.authorization &&
