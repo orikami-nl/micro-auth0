@@ -55,10 +55,12 @@ module.exports = auth0(handler);
 ## Known issues
 
 ### publickey in auth0.js
-If you change the publickey in the ``auth0.js`` file be aware that the Certificate string has no tabs or extra space in it. 
+
+If you change the publickey in the `auth0.js` file be aware that the Certificate string has no tabs or extra space in it.
 
 ## Changelog
 
+- 1.0.0 - Change default config with ENV variables AUTH0_PUBLICKEY, AUTH0_ROLES_KEY and AUTH0_JWT_ALGORITHMS
 - 0.3.0 - Check for token query param in `x-forwarded-uri`
 - 0.1.0 - Refactor
 - 0.0.2 - Initial release

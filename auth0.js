@@ -1,6 +1,21 @@
+const getarray = (key, value = []) => {
+  if (typeof process.env[key] === "string") {
+    return process.env[key].split(",");
+  }
+  return value;
+};
+const getstring = (key, value) => {
+  if (typeof process.env[key] === "string") {
+    return process.env[key];
+  }
+  return value;
+};
+
 module.exports = {
   // orikami.eu.auth0.com
-  publickey: `-----BEGIN CERTIFICATE-----
+  publickey:
+    process.env.AUTH0_PUBLICKEY ||
+    `-----BEGIN CERTIFICATE-----
 MIIDAzCCAeugAwIBAgIJD4Z2X9+++wcAMA0GCSqGSIb3DQEBCwUAMB8xHTAbBgNV
 BAMTFG9yaWthbWkuZXUuYXV0aDAuY29tMB4XDTE3MDgwMjEyMTkwNVoXDTMxMDQx
 MTEyMTkwNVowHzEdMBsGA1UEAxMUb3Jpa2FtaS5ldS5hdXRoMC5jb20wggEiMA0G
@@ -21,11 +36,11 @@ fKatc8BH/Q==
 -----END CERTIFICATE-----
 `,
   roles: {
-      key: "https://orikami-api.nl/roles",
-      // allowed: ['developer'],
+    key: getstring("AUTH0_ROLES_KEY", "https://orikami-api.nl/roles")
+    // allowed: ['developer'],
   },
   jwt: {
-    algorithms: ["RS256"],
+    algorithms: getarray("AUTH0_JWT_ALGORITHMS", ["RS256"])
     // audience: "https://orikami-api.nl/v1/",
     // ignoreExpiration: false
     // issuer: "",

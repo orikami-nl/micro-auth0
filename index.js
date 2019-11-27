@@ -27,7 +27,7 @@ module.exports = (opts = {}) => handler => async (req, res) => {
 
   // Try to verify JWT token
   try {
-    const jwtOptions = Object.assign({}, auth0.jwt, opts.jwt);
+    const jwtOptions = Object.assign({}, auth0.jwt, opts.jwt || {});
     const publickey = opts.publickey || auth0.publickey;
     req.token = jwt.verify(token, publickey, jwtOptions);
 
