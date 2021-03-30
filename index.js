@@ -36,7 +36,7 @@ module.exports = (opts = {}) => handler => async (req, res) => {
     // See https://orikami.eu8.webtask.io/adf6e2f2b84784b57522e3b19dfc9201/admins/login
     if (opts.roles && opts.roles.allowed && opts.roles.key) {
       const roles = req.token[opts.roles.key];
-      if (roles.every(role => opts.roles.allowed.indexOf(role) < 0)) {
+      if (roles.some(role => opts.roles.allowed.indexOf(role) < 0)) {
         throw new Error(
           `Forbidden for ${roles.join(", ")}, need: ${opts.roles.allowed.join(
             ", "
