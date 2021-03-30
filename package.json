@@ -1,6 +1,6 @@
 {
   "name": "@orikami/micro-auth0",
-  "version": "1.0.0",
+  "version": "1.0.1",
   "description": "Micro Auth0 helper",
   "main": "index.js",
   "author": "Mark Marijnissen",
